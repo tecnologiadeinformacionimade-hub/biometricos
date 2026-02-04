@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="imade.ico">
+    <title>IMADE | Login - Acceso al Sistema</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --imade-blue: #1e4bb5;
+            --imade-blue-dark: #163a8d;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .header-blue {
+            background-color: var(--imade-blue);
+            background-image: linear-gradient(135deg, var(--imade-blue) 0%, var(--imade-blue-dark) 100%);
+        }
+
+        .login-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-focus:focus {
+            border-color: var(--imade-blue);
+            box-shadow: 0 0 0 3px rgba(30, 75, 181, 0.1);
+            outline: none;
+        }
+
+        .btn-imade {
+            background-color: var(--imade-blue);
+            transition: all 0.3s;
+        }
+
+        .btn-imade:hover {
+            background-color: var(--imade-blue-dark);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-center items-center p-6">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-800 tracking-tight">
+                IMADE <span class="font-light text-slate-400">| Biométrico</span>
+            </h1>
+            <p class="text-xs text-slate-500 uppercase tracking-widest mt-2">Control de Acceso de Usuarios</p>
+        </div>
+
+        <div class="login-card rounded-3xl p-8 md:p-10">
+            <h2 class="text-xl font-semibold text-slate-700 mb-6 text-center">Iniciar Sesión</h2>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Usuario</label>
+                    <input type="text" id="username" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 input-focus transition-all text-slate-700"
+                        placeholder="Ingrese su usuario">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Contraseña</label>
+                    <input type="password" id="password" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 input-focus transition-all text-slate-700"
+                        placeholder="••••••••">
+                </div>
+
+                <div id="errorMessage" class="hidden text-red-500 text-xs font-medium text-center">
+                    Credenciales incorrectas. Intente de nuevo.
+                </div>
+
+                <button type="submit" 
+                    class="w-full btn-imade text-white font-bold py-3 rounded-xl shadow-lg uppercase tracking-widest text-sm mt-4">
+                    Ingresar al Sistema
+                </button>
+            </form>
+        </div>
+
+        <p class="mt-8 text-center text-slate-400 text-[9px] uppercase tracking-[0.4em]">
+            &copy; 2026 Departamento de IT
+        </p>
+    </div>
+
+    <script>
+ // Configuración de Seguridad
+let loginAttempts = 0;
+const MAX_ATTEMPTS = 3;
+const LOCK_TIME = 30; // Segundos
+
+const loginForm = document.getElementById('loginForm');
+const passInput = document.getElementById('password');
+const submitBtn = loginForm.querySelector('button[type="submit"]');
+const errorDiv = document.getElementById('errorMessage');
+
+// --- 1. DETECTOR DE BLOQ MAYÚS (COLOR ROJO) ---
+passInput.addEventListener('keyup', function (event) {
+    if (event.getModifierState('CapsLock')) {
+        errorDiv.innerText = "BLOQUEO DE MAYÚSCULAS ACTIVADO";
+        errorDiv.classList.remove('hidden', 'text-amber-500');
+        errorDiv.classList.add('text-red-600', 'font-bold'); // Rojo intenso y negrita
+    } else {
+        if (loginAttempts === 0) {
+            errorDiv.classList.add('hidden');
+        }
+        errorDiv.classList.remove('font-bold');
+    }
+});
+
+// --- 2. LÓGICA DE LOGIN CON TEMPORIZADOR ---
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const user = document.getElementById('username').value.trim();
+    const pass = passInput.value;
+
+    // Si ya está bloqueado, no hacer nada
+    if (submitBtn.disabled && loginAttempts >= MAX_ATTEMPTS) return;
+
+    // Feedback de carga inicial
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = "VERIFICANDO...";
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+        if (user === "Recursos" && pass === "123") {
+            window.location.href = "plataforma.html";
+        } 
+        else if (user === "admin" && pass === "ImadeTI-2025") {
+            window.location.href = "plataformaAdmin.html";
+        } 
+        else {
+            loginAttempts++;
+            
+            if (loginAttempts >= MAX_ATTEMPTS) {
+                // INICIO DEL TEMPORIZADOR
+                let timeLeft = LOCK_TIME;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                errorDiv.classList.remove('hidden');
+                errorDiv.classList.add('text-red-600');
+
+                const countdown = setInterval(() => {
+                    submitBtn.innerText = `BLOQUEADO (${timeLeft}s)`;
+                    errorDiv.innerText = `Demasiados intentos. Intente de nuevo en ${timeLeft} segundos.`;
+                    timeLeft--;
+
+                    if (timeLeft < 0) {
+                        clearInterval(countdown);
+                        loginAttempts = 0;
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        errorDiv.classList.add('hidden');
+                    }
+                }, 1000);
+            } else {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+                errorDiv.innerText = `Credenciales incorrectas. Intento ${loginAttempts} de ${MAX_ATTEMPTS}`;
+                errorDiv.classList.remove('hidden');
+                errorDiv.classList.add('text-red-600');
+            }
+        }
+    }, 600);
+});
+    </script>
+</body>
+
+</html>

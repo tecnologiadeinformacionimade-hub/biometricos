@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="imade.ico">
+    <title>IMADE | Acceso Biométrico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #1e40af;
+            --brand-light: #60a5fa;
+            --bg-dark: #0f172a;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Efecto de partículas de fondo sutiles */
+        .bg-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--brand-blue);
+            filter: blur(120px);
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: 0;
+            animation: move-glow 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes move-glow {
+            from {
+                transform: translate(-20%, -20%);
+            }
+
+            to {
+                transform: translate(20%, 20%);
+            }
+        }
+
+        /* Tarjeta principal con Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3.5rem 2.5rem;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: card-entry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes card-entry {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-img {
+            max-width: 200px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+            transition: transform 0.3s ease;
+        }
+
+        /* Escaneo biométrico sutil */
+        .scan-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(96, 165, 250, 0.2), transparent);
+            transform: translateY(-100%);
+            animation: scan-move 2.5s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes scan-move {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            50% {
+                transform: translateY(100%);
+            }
+
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        /* Barra de carga moderna */
+        .progress-wrapper {
+            margin-top: 2.5rem;
+            position: relative;
+        }
+
+        .progress-bg {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #1d4ed8, #60a5fa);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #93c5fd;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .data-stream {
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 1.5rem;
+            height: 1rem;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="glass-card">
+        <!-- Indicador de estado -->
+        <div class="status-badge">
+            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+            Sistema Activo
+        </div>
+
+        <!-- Logo con efecto de escaneo sutil -->
+
+
+        <!-- Títulos -->
+        <div class="space-y-1">
+            <h1 class="text-2xl font-bold tracking-tight text-white">
+                Sistema de Reporte Biométrico
+            </h1>
+            <p class="text-blue-400 font-semibold text-lg">IMADE</p>
+            <p class="text-sm text-slate-400 pt-2 flex items-center justify-center">
+                <svg class="w-4 h-4 mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Departamento de IT
+            </p>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="progress-wrapper">
+            <div class="progress-bg">
+                <div id="progressBar" class="progress-fill"></div>
+            </div>
+            <div class="flex justify-between items-center mt-3">
+                <span id="statusLabel" class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Cargando
+                    módulos...</span>
+                <span id="percentText" class="text-xs font-bold text-blue-400">0%</span>
+            </div>
+        </div>
+
+        <!-- Stream de datos (Detalle "informático") -->
+        <div id="dataStream" class="data-stream">
+            CONNECTING TO SERVER_MIR_01...
+        </div>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progressBar');
+        const percentText = document.getElementById('percentText');
+        const statusLabel = document.getElementById('statusLabel');
+        const dataStream = document.getElementById('dataStream');
+
+        const steps = [
+            { p: 15, label: "Iniciando núcleo...", data: "AUTH_INIT::SECURE_SOCKET_OPENED" },
+            { p: 35, label: "Validando Biometría...", data: "SCAN_RECOGNITION_ALGORITHM_LOADED" },
+            { p: 55, label: "Base de datos Miraflores...", data: "DB_QUERY::FETCHING_RESIDENT_REPORTS" },
+            { p: 75, label: "Cifrando canal...", data: "SSL_HANDSHAKE_COMPLETE_AES256" },
+            { p: 90, label: "Sincronizando...", data: "DATA_STREAMS_SYNC_100MS" },
+            { p: 100, label: "Acceso Permitido", data: "REDIRECTING_TO_DASHBOARD..." }
+        ];
+
+        let progress = 0;
+        const totalDuration = 3500;
+        const interval = 30;
+        const stepSize = 100 / (totalDuration / interval);
+
+        const timer = setInterval(() => {
+            progress += stepSize;
+
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(timer);
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 400);
+            }
+
+            // Actualizar Interfaz
+            progressBar.style.width = `${progress}%`;
+            percentText.innerText = `${Math.floor(progress)}%`;
+
+            // Actualizar mensajes según el progreso
+            const currentStep = steps.find(s => progress <= s.p) || steps[steps.length - 1];
+            statusLabel.innerText = currentStep.label;
+
+            // Efecto de texto de consola aleatorio para el dataStream
+            if (Math.random() > 0.8) {
+                dataStream.innerText = currentStep.data + " [" + Math.random().toString(16).substring(2, 8).toUpperCase() + "]";
+            }
+
+        }, interval);
+
+        // Fallback logo
+        document.getElementById('mainLogo').onerror = function () {
+            this.style.display = 'none';
+        };
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registrado con éxito'))
+                    .catch(err => console.log('Error al registrar SW:', err));
+            });
+        }
+    </script>
+</body>
+</html>
